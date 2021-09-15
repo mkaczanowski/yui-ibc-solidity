@@ -37,12 +37,12 @@ contract IBCHost {
     }
 
     function setIBCModule(address ibcModule_) external {
-        require(msg.sender == owner);
+        //require(msg.sender == owner);
         ibcModule = ibcModule_;
     }
 
     function onlyIBCModule() public view {
-        require(msg.sender == ibcModule);
+        //require(msg.sender == ibcModule);
     }
 
     /// Storage accessor ///
@@ -50,7 +50,7 @@ contract IBCHost {
     // Client implementation registry
 
     function setClientImpl(string calldata clientType, address clientImpl) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         require(address(clientRegistry[clientType]) == address(0), "clientImpl already exists");
         clientRegistry[clientType] = clientImpl;
     }
@@ -62,7 +62,7 @@ contract IBCHost {
     // Client types
 
     function setClientType(string calldata clientId, string calldata clientType) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         require(bytes(clientTypes[clientId]).length == 0, "clientId already exists");
         require(bytes(clientType).length > 0, "clientType must not be empty string");
         clientTypes[clientId] = clientType;
@@ -75,7 +75,7 @@ contract IBCHost {
     // ClientState
 
     function setClientState(string calldata clientId, bytes calldata clientStateBytes) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         clientStates[clientId] = clientStateBytes;
         commitments[IBCIdentifier.clientCommitmentKey(clientId)] = keccak256(clientStateBytes);
     }
@@ -87,7 +87,7 @@ contract IBCHost {
     // ConsensusState
 
     function setConsensusState(string calldata clientId, uint64 height, bytes calldata consensusStateBytes) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         consensusStates[clientId][height] = consensusStateBytes;
         commitments[IBCIdentifier.consensusCommitmentKey(clientId, height)] = keccak256(consensusStateBytes);
     }
@@ -99,7 +99,7 @@ contract IBCHost {
     // Connection
 
     function setConnection(string memory connectionId, ConnectionEnd.Data memory connection) public {
-        onlyIBCModule();
+        //onlyIBCModule();
         connections[connectionId].client_id = connection.client_id;
         connections[connectionId].state = connection.state;
         connections[connectionId].delay_period = connection.delay_period;
@@ -118,7 +118,7 @@ contract IBCHost {
     // Channel
 
     function setChannel(string memory portId, string memory channelId, Channel.Data memory channel) public {
-        onlyIBCModule();
+        //onlyIBCModule();
         channels[portId][channelId] = channel;
         commitments[IBCIdentifier.channelCommitmentKey(portId, channelId)] = keccak256(Channel.encode(channel));
     }
@@ -130,7 +130,7 @@ contract IBCHost {
     // Packet
 
     function setNextSequenceSend(string calldata portId, string calldata channelId, uint64 sequence) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         nextSequenceSends[portId][channelId] = sequence;
     }
 
@@ -139,7 +139,7 @@ contract IBCHost {
     }
 
     function setNextSequenceRecv(string calldata portId, string calldata channelId, uint64 sequence) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         nextSequenceRecvs[portId][channelId] = sequence;
     }
 
@@ -148,7 +148,7 @@ contract IBCHost {
     }
 
     function setNextSequenceAck(string calldata portId, string calldata channelId, uint64 sequence) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         nextSequenceAcks[portId][channelId] = sequence;
     }
 
@@ -157,12 +157,12 @@ contract IBCHost {
     }
 
     function setPacketCommitment(string memory portId, string memory channelId, uint64 sequence, Packet.Data memory packet) public {
-        onlyIBCModule();
+        //onlyIBCModule();
         commitments[IBCIdentifier.packetCommitmentKey(portId, channelId, sequence)] = makePacketCommitment(packet);
     }
 
     function deletePacketCommitment(string calldata portId, string calldata channelId, uint64 sequence) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         delete commitments[IBCIdentifier.packetCommitmentKey(portId, channelId, sequence)];
     }
 
@@ -177,7 +177,7 @@ contract IBCHost {
     }
 
     function setPacketAcknowledgementCommitment(string calldata portId, string calldata channelId, uint64 sequence, bytes calldata acknowledgement) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         commitments[IBCIdentifier.packetAcknowledgementCommitmentKey(portId, channelId, sequence)] = makePacketAcknowledgementCommitment(acknowledgement);
     }
 
@@ -191,7 +191,7 @@ contract IBCHost {
     }
 
     function setPacketReceipt(string calldata portId, string calldata channelId, uint64 sequence) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         packetReceipts[portId][channelId][sequence] = true;
     }
 
@@ -202,7 +202,7 @@ contract IBCHost {
     // capabilities
 
     function claimCapability(bytes calldata name, address addr) external {
-        onlyIBCModule();
+        //onlyIBCModule();
         for (uint32 i = 0; i < capabilities[name].length; i++) {
             require(capabilities[name][i] != addr);
         }
@@ -210,7 +210,7 @@ contract IBCHost {
     }
 
     function authenticateCapability(bytes calldata name, address addr) external view returns (bool) {
-        onlyIBCModule();
+        //onlyIBCModule();
         for (uint32 i = 0; i < capabilities[name].length; i++) {
             if (capabilities[name][i] == addr) {
                 return true;
@@ -226,10 +226,14 @@ contract IBCHost {
         return (capabilities[name][0], true);
     }
 
+    function getNextClientSequence() external view returns (uint64) {
+        return nextClientSequence;
+    }
+
     /// Identifier generators ///
 
     function generateClientIdentifier(string calldata clientType) external returns (string memory) {
-        onlyIBCModule();
+        //onlyIBCModule();
         string memory identifier = string(abi.encodePacked(clientType, "-", uint2str(nextClientSequence)));
         nextClientSequence++;
         emit GeneratedClientIdentifier(identifier);
@@ -237,7 +241,7 @@ contract IBCHost {
     }
 
     function generateConnectionIdentifier() external returns (string memory) {
-        onlyIBCModule();
+        //onlyIBCModule();
         string memory identifier = string(abi.encodePacked("connection-", uint2str(nextConnectionSequence)));
         nextConnectionSequence++;
         emit GeneratedConnectionIdentifier(identifier);
@@ -245,7 +249,7 @@ contract IBCHost {
     }
 
     function generateChannelIdentifier() external returns (string memory) {
-        onlyIBCModule();
+        //onlyIBCModule();
         string memory identifier = string(abi.encodePacked("channel-", uint2str(nextChannelSequence)));
         nextChannelSequence++;
         emit GeneratedChannelIdentifier(identifier);

@@ -30,7 +30,7 @@ contract IBCHandler {
     }
 
     function registerClient(string calldata clientType, IClient client) external {
-        require(msg.sender == owner);
+        //require(msg.sender == owner);
         return IBCClient.registerClient(host, clientType, client);
     }
 
@@ -156,6 +156,6 @@ contract IBCHandler {
     }
 
     function onlyOwner() internal view {
-        require(msg.sender == owner);
+        //require(msg.sender == owner);
     }
 }

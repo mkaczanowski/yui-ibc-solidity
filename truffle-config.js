@@ -19,6 +19,7 @@
  */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
+//var mnemonic = "math razor capable expose worth grape metal sunset metal sudden usage scheme";
 var mnemonic = "math razor capable expose worth grape metal sunset metal sudden usage scheme";
 // const infuraKey = "fj4jll3k.....";
 //
@@ -43,30 +44,37 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    development: {
-     host: "127.0.0.1",     // Localhost (default: none)
-     port: 8545,            // Standard Ethereum port (default: none)
-     network_id: "*",       // Any network (default: none)
-    //  gas: 100000000,
-     provider: () =>
-      new HDWalletProvider(mnemonic, "http://localhost:8545", 0, 10)
-    },
-    testchain0: {
+    celo: {
       host: "127.0.0.1",     // Localhost (default: none)
-      port: 8645,            // Standard Ethereum port (default: none)
+      port: 8545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
-      // gas: 100000000,
+      networkCheckTimeout: 100000000,
+      timeoutBlocks: 200,
+      websocket: true,
+      gas: 10000000,
       provider: () =>
-       new HDWalletProvider(mnemonic, "http://localhost:8645", 0, 10)
+       new HDWalletProvider(mnemonic, "ws://127.0.0.1:3334", 0, 10)
      },
-     testchain1: {
-      host: "127.0.0.1",     // Localhost (default: none)
-      port: 8745,            // Standard Ethereum port (default: none)
-      network_id: "*",       // Any network (default: none)
-      // gas: 100000000,
-      provider: () =>
-       new HDWalletProvider(mnemonic, "http://localhost:8745", 0, 10)
-     }
+     ganache: {
+       host: "127.0.0.1",     // Localhost (default: none)
+       port: 8545,            // Standard Ethereum port (default: none)
+       network_id: "*",       // Any network (default: none)
+       networkCheckTimeout: 100000000,
+       timeoutBlocks: 200,
+       websocket: false,
+       provider: () =>
+       new HDWalletProvider(mnemonic, "ws://localhost:8545", 0, 10)
+     },
+     geth: {
+       host: "127.0.0.1",     // Localhost (default: none)
+       port: 8545,            // Standard Ethereum port (default: none)
+       network_id: "*",       // Any network (default: none)
+       networkCheckTimeout: 100000000,
+       timeoutBlocks: 200,
+       websocket: false,
+       provider: () =>
+       new HDWalletProvider(mnemonic, "http://localhost:8545", 0, 10)
+     },
   },
 
   // Set default mocha options here, use special reporters etc.
@@ -82,13 +90,12 @@ module.exports = {
       settings: {          // See the solidity docs for advice about optimization and evmVersion
        optimizer: {
          enabled: true,
-         runs: 1000
+         runs: 100
        },
       //  evmVersion: "byzantium"
       }
     }
   },
-
   plugins: [
     'truffle-contract-size'
   ]

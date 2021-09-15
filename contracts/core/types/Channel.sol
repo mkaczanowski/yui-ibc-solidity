@@ -18,7 +18,7 @@ library Channel {
 
 
   // Solidity enum encoder
-  function encode_State(State x) internal pure returns (int32) {
+  function encode_State(State x) internal pure returns (int64) {
     
     if (x == State.STATE_UNINITIALIZED_UNSPECIFIED) {
       return 0;
@@ -78,7 +78,7 @@ library Channel {
 
 
   // Solidity enum encoder
-  function encode_Order(Order x) internal pure returns (int32) {
+  function encode_Order(Order x) internal pure returns (int64) {
     
     if (x == Order.ORDER_NONE_UNSPECIFIED) {
       return 0;
@@ -447,27 +447,22 @@ library Channel {
     uint256 offset = p;
     uint256 pointer = p;
     uint256 i;
-    if (uint(r.state) != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.Varint,
       pointer,
       bs
     );
-    int32 _enum_state = encode_State(r.state);
+    int64 _enum_state = encode_State(r.state);
     pointer += ProtoBufRuntime._encode_enum(_enum_state, pointer, bs);
-    }
-    if (uint(r.ordering) != 0) {
     pointer += ProtoBufRuntime._encode_key(
       2,
       ProtoBufRuntime.WireType.Varint,
       pointer,
       bs
     );
-    int32 _enum_ordering = encode_Order(r.ordering);
+    int64 _enum_ordering = encode_Order(r.ordering);
     pointer += ProtoBufRuntime._encode_enum(_enum_ordering, pointer, bs);
-    }
-    
     pointer += ProtoBufRuntime._encode_key(
       3,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -475,8 +470,6 @@ library Channel {
       bs
     );
     pointer += ChannelCounterparty._encode_nested(r.counterparty, pointer, bs);
-    
-    if (r.connection_hops.length != 0) {
     for(i = 0; i < r.connection_hops.length; i++) {
       pointer += ProtoBufRuntime._encode_key(
         4,
@@ -486,8 +479,6 @@ library Channel {
       ;
       pointer += ProtoBufRuntime._encode_string(r.connection_hops[i], pointer, bs);
     }
-    }
-    if (bytes(r.version).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       5,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -495,7 +486,6 @@ library Channel {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.version, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -548,31 +538,6 @@ library Channel {
     e += 1 + ProtoBufRuntime._sz_lendelim(bytes(r.version).length);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (uint(r.state) != 0) {
-    return false;
-  }
-
-  if (uint(r.ordering) != 0) {
-    return false;
-  }
-
-  if (r.connection_hops.length != 0) {
-    return false;
-  }
-
-  if (bytes(r.version).length != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -811,7 +776,6 @@ library ChannelCounterparty {
     uint256 offset = p;
     uint256 pointer = p;
     
-    if (bytes(r.port_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -819,8 +783,6 @@ library ChannelCounterparty {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.port_id, pointer, bs);
-    }
-    if (bytes(r.channel_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       2,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -828,7 +790,6 @@ library ChannelCounterparty {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.channel_id, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -876,23 +837,6 @@ library ChannelCounterparty {
     e += 1 + ProtoBufRuntime._sz_lendelim(bytes(r.channel_id).length);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (bytes(r.port_id).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.channel_id).length != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -1337,27 +1281,22 @@ library ChannelIdentifiedChannel {
     uint256 offset = p;
     uint256 pointer = p;
     uint256 i;
-    if (uint(r.state) != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.Varint,
       pointer,
       bs
     );
-    int32 _enum_state = Channel.encode_State(r.state);
+    int64 _enum_state = Channel.encode_State(r.state);
     pointer += ProtoBufRuntime._encode_enum(_enum_state, pointer, bs);
-    }
-    if (uint(r.ordering) != 0) {
     pointer += ProtoBufRuntime._encode_key(
       2,
       ProtoBufRuntime.WireType.Varint,
       pointer,
       bs
     );
-    int32 _enum_ordering = Channel.encode_Order(r.ordering);
+    int64 _enum_ordering = Channel.encode_Order(r.ordering);
     pointer += ProtoBufRuntime._encode_enum(_enum_ordering, pointer, bs);
-    }
-    
     pointer += ProtoBufRuntime._encode_key(
       3,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1365,8 +1304,6 @@ library ChannelIdentifiedChannel {
       bs
     );
     pointer += ChannelCounterparty._encode_nested(r.counterparty, pointer, bs);
-    
-    if (r.connection_hops.length != 0) {
     for(i = 0; i < r.connection_hops.length; i++) {
       pointer += ProtoBufRuntime._encode_key(
         4,
@@ -1376,8 +1313,6 @@ library ChannelIdentifiedChannel {
       ;
       pointer += ProtoBufRuntime._encode_string(r.connection_hops[i], pointer, bs);
     }
-    }
-    if (bytes(r.version).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       5,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1385,8 +1320,6 @@ library ChannelIdentifiedChannel {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.version, pointer, bs);
-    }
-    if (bytes(r.port_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       6,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1394,8 +1327,6 @@ library ChannelIdentifiedChannel {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.port_id, pointer, bs);
-    }
-    if (bytes(r.channel_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       7,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1403,7 +1334,6 @@ library ChannelIdentifiedChannel {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.channel_id, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -1458,39 +1388,6 @@ library ChannelIdentifiedChannel {
     e += 1 + ProtoBufRuntime._sz_lendelim(bytes(r.channel_id).length);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (uint(r.state) != 0) {
-    return false;
-  }
-
-  if (uint(r.ordering) != 0) {
-    return false;
-  }
-
-  if (r.connection_hops.length != 0) {
-    return false;
-  }
-
-  if (bytes(r.version).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.port_id).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.channel_id).length != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -1937,7 +1834,6 @@ library Packet {
     uint256 offset = p;
     uint256 pointer = p;
     
-    if (r.sequence != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.Varint,
@@ -1945,8 +1841,6 @@ library Packet {
       bs
     );
     pointer += ProtoBufRuntime._encode_uint64(r.sequence, pointer, bs);
-    }
-    if (bytes(r.source_port).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       2,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1954,8 +1848,6 @@ library Packet {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.source_port, pointer, bs);
-    }
-    if (bytes(r.source_channel).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       3,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1963,8 +1855,6 @@ library Packet {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.source_channel, pointer, bs);
-    }
-    if (bytes(r.destination_port).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       4,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1972,8 +1862,6 @@ library Packet {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.destination_port, pointer, bs);
-    }
-    if (bytes(r.destination_channel).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       5,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1981,8 +1869,6 @@ library Packet {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.destination_channel, pointer, bs);
-    }
-    if (r.data.length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       6,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1990,8 +1876,6 @@ library Packet {
       bs
     );
     pointer += ProtoBufRuntime._encode_bytes(r.data, pointer, bs);
-    }
-    
     pointer += ProtoBufRuntime._encode_key(
       7,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1999,8 +1883,6 @@ library Packet {
       bs
     );
     pointer += Height._encode_nested(r.timeout_height, pointer, bs);
-    
-    if (r.timeout_timestamp != 0) {
     pointer += ProtoBufRuntime._encode_key(
       8,
       ProtoBufRuntime.WireType.Varint,
@@ -2008,7 +1890,6 @@ library Packet {
       bs
     );
     pointer += ProtoBufRuntime._encode_uint64(r.timeout_timestamp, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -2062,43 +1943,6 @@ library Packet {
     e += 1 + ProtoBufRuntime._sz_uint64(r.timeout_timestamp);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (r.sequence != 0) {
-    return false;
-  }
-
-  if (bytes(r.source_port).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.source_channel).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.destination_port).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.destination_channel).length != 0) {
-    return false;
-  }
-
-  if (r.data.length != 0) {
-    return false;
-  }
-
-  if (r.timeout_timestamp != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -2384,7 +2228,6 @@ library PacketState {
     uint256 offset = p;
     uint256 pointer = p;
     
-    if (bytes(r.port_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -2392,8 +2235,6 @@ library PacketState {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.port_id, pointer, bs);
-    }
-    if (bytes(r.channel_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       2,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -2401,8 +2242,6 @@ library PacketState {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.channel_id, pointer, bs);
-    }
-    if (r.sequence != 0) {
     pointer += ProtoBufRuntime._encode_key(
       3,
       ProtoBufRuntime.WireType.Varint,
@@ -2410,8 +2249,6 @@ library PacketState {
       bs
     );
     pointer += ProtoBufRuntime._encode_uint64(r.sequence, pointer, bs);
-    }
-    if (r.data.length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       4,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -2419,7 +2256,6 @@ library PacketState {
       bs
     );
     pointer += ProtoBufRuntime._encode_bytes(r.data, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -2469,31 +2305,6 @@ library PacketState {
     e += 1 + ProtoBufRuntime._sz_lendelim(r.data.length);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (bytes(r.port_id).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.channel_id).length != 0) {
-    return false;
-  }
-
-  if (r.sequence != 0) {
-    return false;
-  }
-
-  if (r.data.length != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -2713,7 +2524,6 @@ library Height {
     uint256 offset = p;
     uint256 pointer = p;
     
-    if (r.revision_number != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.Varint,
@@ -2721,8 +2531,6 @@ library Height {
       bs
     );
     pointer += ProtoBufRuntime._encode_uint64(r.revision_number, pointer, bs);
-    }
-    if (r.revision_height != 0) {
     pointer += ProtoBufRuntime._encode_key(
       2,
       ProtoBufRuntime.WireType.Varint,
@@ -2730,7 +2538,6 @@ library Height {
       bs
     );
     pointer += ProtoBufRuntime._encode_uint64(r.revision_height, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -2778,23 +2585,6 @@ library Height {
     e += 1 + ProtoBufRuntime._sz_uint64(r.revision_height);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (r.revision_number != 0) {
-    return false;
-  }
-
-  if (r.revision_height != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**

@@ -4,6 +4,11 @@ package ibc.lightclients.ibft2.v1;
 
 option go_package = "pkg/ibc/client/ibft2";
 
+message TestStruct {
+  string chain_id = 1;
+  string chain_id_2 = 2;
+}
+
 message ClientState {
   string chain_id = 1;
   bytes ibc_store_address = 2;

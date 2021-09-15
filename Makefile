@@ -1,4 +1,4 @@
-NETWORK ?= development
+NETWORK ?= testchain0
 TRUFFLE ?= npx truffle
 ABIGEN ?= abigen
 
@@ -8,7 +8,7 @@ build:
 
 .PHONY: config
 config:
-	export CONF_TPL="./pkg/consts/contract.go:./scripts/template/contract.go.tpl" && $(TRUFFLE) exec ./scripts/confgen.js --network=$(NETWORK)
+	export CONF_TPL="./src/consts.rs:./scripts/template/contract.rs.tpl" && $(TRUFFLE) exec ./scripts/confgen.js --network=$(NETWORK)
 
 .PHONY: abi
 abi:

@@ -16,7 +16,7 @@ library ConnectionEnd {
 
 
   // Solidity enum encoder
-  function encode_State(State x) internal pure returns (int32) {
+  function encode_State(State x) internal pure returns (int64) {
     
     if (x == State.STATE_UNINITIALIZED_UNSPECIFIED) {
       return 0;
@@ -411,7 +411,6 @@ library ConnectionEnd {
     uint256 offset = p;
     uint256 pointer = p;
     uint256 i;
-    if (bytes(r.client_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -419,8 +418,6 @@ library ConnectionEnd {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.client_id, pointer, bs);
-    }
-    if (r.versions.length != 0) {
     for(i = 0; i < r.versions.length; i++) {
       pointer += ProtoBufRuntime._encode_key(
         2,
@@ -430,18 +427,14 @@ library ConnectionEnd {
       ;
       pointer += Version._encode_nested(r.versions[i], pointer, bs);
     }
-    }
-    if (uint(r.state) != 0) {
     pointer += ProtoBufRuntime._encode_key(
       3,
       ProtoBufRuntime.WireType.Varint,
       pointer,
       bs
     );
-    int32 _enum_state = encode_State(r.state);
+    int64 _enum_state = encode_State(r.state);
     pointer += ProtoBufRuntime._encode_enum(_enum_state, pointer, bs);
-    }
-    
     pointer += ProtoBufRuntime._encode_key(
       4,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -449,8 +442,6 @@ library ConnectionEnd {
       bs
     );
     pointer += Counterparty._encode_nested(r.counterparty, pointer, bs);
-    
-    if (r.delay_period != 0) {
     pointer += ProtoBufRuntime._encode_key(
       5,
       ProtoBufRuntime.WireType.Varint,
@@ -458,7 +449,6 @@ library ConnectionEnd {
       bs
     );
     pointer += ProtoBufRuntime._encode_uint64(r.delay_period, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -511,31 +501,6 @@ library ConnectionEnd {
     e += 1 + ProtoBufRuntime._sz_uint64(r.delay_period);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (bytes(r.client_id).length != 0) {
-    return false;
-  }
-
-  if (r.versions.length != 0) {
-    return false;
-  }
-
-  if (uint(r.state) != 0) {
-    return false;
-  }
-
-  if (r.delay_period != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -829,7 +794,6 @@ library Counterparty {
     uint256 offset = p;
     uint256 pointer = p;
     
-    if (bytes(r.client_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -837,8 +801,6 @@ library Counterparty {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.client_id, pointer, bs);
-    }
-    if (bytes(r.connection_id).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       2,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -846,8 +808,6 @@ library Counterparty {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.connection_id, pointer, bs);
-    }
-    
     pointer += ProtoBufRuntime._encode_key(
       3,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -855,7 +815,6 @@ library Counterparty {
       bs
     );
     pointer += MerklePrefix._encode_nested(r.prefix, pointer, bs);
-    
     return pointer - offset;
   }
   // nested encoder
@@ -904,23 +863,6 @@ library Counterparty {
     e += 1 + ProtoBufRuntime._sz_lendelim(MerklePrefix._estimate(r.prefix));
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (bytes(r.client_id).length != 0) {
-    return false;
-  }
-
-  if (bytes(r.connection_id).length != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -1108,7 +1050,6 @@ library MerklePrefix {
     uint256 offset = p;
     uint256 pointer = p;
     
-    if (r.key_prefix.length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1116,7 +1057,6 @@ library MerklePrefix {
       bs
     );
     pointer += ProtoBufRuntime._encode_bytes(r.key_prefix, pointer, bs);
-    }
     return pointer - offset;
   }
   // nested encoder
@@ -1163,19 +1103,6 @@ library MerklePrefix {
     e += 1 + ProtoBufRuntime._sz_lendelim(r.key_prefix.length);
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (r.key_prefix.length != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
@@ -1427,7 +1354,6 @@ library Version {
     uint256 offset = p;
     uint256 pointer = p;
     uint256 i;
-    if (bytes(r.identifier).length != 0) {
     pointer += ProtoBufRuntime._encode_key(
       1,
       ProtoBufRuntime.WireType.LengthDelim,
@@ -1435,8 +1361,6 @@ library Version {
       bs
     );
     pointer += ProtoBufRuntime._encode_string(r.identifier, pointer, bs);
-    }
-    if (r.features.length != 0) {
     for(i = 0; i < r.features.length; i++) {
       pointer += ProtoBufRuntime._encode_key(
         2,
@@ -1445,7 +1369,6 @@ library Version {
         bs)
       ;
       pointer += ProtoBufRuntime._encode_string(r.features[i], pointer, bs);
-    }
     }
     return pointer - offset;
   }
@@ -1496,23 +1419,6 @@ library Version {
     }
     return e;
   }
-  // empty checker
-
-  function _empty(
-    Data memory r
-  ) internal pure returns (bool) {
-    
-  if (bytes(r.identifier).length != 0) {
-    return false;
-  }
-
-  if (r.features.length != 0) {
-    return false;
-  }
-
-    return true;
-  }
-
 
   //store function
   /**
